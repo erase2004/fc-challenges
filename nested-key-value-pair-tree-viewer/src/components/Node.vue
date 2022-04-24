@@ -9,7 +9,7 @@ div(class="text-lg")
         @click.stop="toggle"
       ) [{{collapse === true ? '+' : '-'}}]
     div(
-      class="pl-8"
+      class="pl-[1em]"
       v-show="collapse === false"
     )
       Node(v-for="node in Object.values(props.tree.children)" :tree="node")
@@ -20,7 +20,7 @@ div(class="text-lg")
       span(class="font-bold whitespace-nowrap") {{props.tree.key}}
     div(class="inline")
       span(class="ml-1") :
-      span(class="ml-3 text-rose-300 whitespace-nowrap") {{props.tree.value}}
+      span(class="ml-3 pr-6 text-rose-300 whitespace-nowrap") {{props.tree.value}}
 
 </template>
 
