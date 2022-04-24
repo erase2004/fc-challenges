@@ -2,23 +2,26 @@
 div(class="text-lg")
   //- node with children
   template(v-if="Object.keys(props.tree.children).length > 0")
-    div(class="flex cursor-pointer")
-      span(
-        class="mr-1"
-        @click.stop="toggle"
-      ) [{{collapse === true ? '+' : '-'}}]
+    div(
+      class="flex cursor-pointer"
+      @click.stop="toggle"
+    )
+      span(class="mr-1") [{{collapse === true ? '+' : '-'}}]
       span(class="font-bold whitespace-nowrap") {{props.tree.key}}
     div(
       class="pl-[1.5em]"
       v-show="collapse === false"
     )
-      Node(v-for="node in Object.values(props.tree.children)" :tree="node")
+      Node(
+        v-for="node in Object.values(props.tree.children)"
+        :tree="node"
+      )
 
   //- node without children
   template(v-else)
-    div(class="inline")
+    div(class="inline select-none")
       span(class="font-bold whitespace-nowrap") {{props.tree.key}}
-    div(class="inline")
+    div(class="inline select-none")
       span(class="ml-1") :
       span(class="ml-3 pr-6 text-rose-300 whitespace-nowrap") {{props.tree.value}}
 
