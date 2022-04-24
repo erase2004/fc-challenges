@@ -1,21 +1,20 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
+<template lang="pug">
+div(class="md:px-20 px-2 pt-5 h-screen flex flex-col")
+  h1(class="mb-1 text-2xl text-primary-200 font-bold") Nested Key-Value Pair Tree Viewer
+  div(class="mb-5 flex flex-grow flex-col lg:flex-row overflow-hidden")
+    InputArea(:mounted="teleportTargetMounted")
+    DisplayArea(@ready="setMounted")
 
-<template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<script setup lang="ts">
+import { ref } from 'vue'
+import InputArea from '@/components/InputArea.vue'
+import DisplayArea from '@/components/DisplayArea.vue'
+
+const teleportTargetMounted = ref(false)
+
+function setMounted () {
+  teleportTargetMounted.value = true
 }
-</style>
+</script>
