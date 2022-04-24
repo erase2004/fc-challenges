@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="w-full h-1/2 lg:w-1/2 lg:h-full border border-solid border-primary-200 overflow-hidden flex flex-col")
+div(class="w-full h-1/2 lg:w-1/2 lg:h-full border border-primary-500 overflow-hidden flex flex-col")
   //- add input group button
   div(class="flex justify-end p-3")
     button(class="bg-slate-200 text-slate-800 p-2 font-bold" @click.stop="addInputGroup") &#xff0b;Add New Pair
