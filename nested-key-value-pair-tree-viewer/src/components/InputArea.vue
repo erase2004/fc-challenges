@@ -31,7 +31,7 @@ Teleport(v-if="props.mounted" to="#display-area")
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, toRef } from 'vue'
 import type { Tree } from '@/types/share'
 import TreeView from '@/components/TreeView.vue'
 
@@ -43,12 +43,39 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const mounted = toRef(props, 'mounted')
 
-const inputGroupIndex = ref(0)
-const indexString = inputGroupIndex.value.toString()
-const groupList = reactive([indexString])
-const keyInput: Data = reactive({})
-const valueInput: Data = reactive({})
+const defaultData: Data[] = [
+  {
+    key: 'nav.header.creator',
+    value: '3D Fabric Creator'
+  },
+  {
+    key: 'nav.icon',
+    value: 'Icon name'
+  },
+  {
+    key: 'nav.header.product',
+    value: 'Product'
+  },
+  {
+    key: 'common.feature.experience',
+    value: 'Try It Now!'
+  },
+  {
+    key: 'common.feature.chooseFabric',
+    value: 'Choose Fabric'
+  },
+  {
+    key: '',
+    value: ''
+  }
+]
+
+const inputGroupIndex = ref<number>(0)
+const groupList = reactive<string[]>([])
+const keyInput = reactive<Data>({})
+const valueInput = reactive<Data>({})
 const tree: Tree = reactive({
   key: '',
   value: '',
@@ -56,14 +83,18 @@ const tree: Tree = reactive({
 })
 const KEY_SEPERATOR = '.'
 
-for (const index of groupList) {
+for (const index in defaultData) {
+  const data = defaultData[index]
   const indexString = index.toString()
-  keyInput[indexString] = ''
-  valueInput[indexString] = ''
+  groupList.push(indexString)
+  keyInput[indexString] = data.key
+  valueInput[indexString] = data.value
+  inputGroupIndex.value += 1
 }
 
 watch(keyInput, dataChangeHandle, { deep: true })
 watch(valueInput, dataChangeHandle, { deep: true })
+watch(mounted, dataChangeHandle)
 
 function checkKey (key: string): boolean {
   let isValid: boolean = true
@@ -127,7 +158,7 @@ async function dataChangeHandle () {
   tree.value = ''
   tree.children = {}
 
-  for (const index in groupList) {
+  for (const index of groupList) {
     const key = keyInput[index]
     const value = valueInput[index]
     const isValidKey = checkKey(key)
