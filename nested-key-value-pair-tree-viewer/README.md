@@ -1,16 +1,70 @@
-# Vue 3 + TypeScript + Vite
+# Nested Key-Value Pair Tree Viewer
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Project Preview
+![preview image](./public/preview/01.png)
 
-## Recommended IDE Setup
+- - -
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+## This project is currently built on
 
-## Type Support For `.vue` Imports in TS
+- [Vite](https://vitejs.dev/)
+- [Vue3](https://vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Pug](https://pugjs.org/api/getting-started.html)
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+- - -
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+## Usage Guide
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+### Project setup
+```
+yarn install
+```
+
+### Compiles and hot-reloads for development
+```
+yarn dev
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Preview production build before deploy
+```
+yarn preview
+```
+- - -
+
+## Deploy Guide
+
+[Deploy a Static Site | Vite](https://vitejs.dev/guide/static-deploy.html#netlify)
+
+- - -
+
+## Project Directory Explanation
+    /src               - root directory of source code
+    /src/styles        - CSS source code
+    /src/assets        - root directory of static files
+
+- - -
+
+## Problems and Solutions
+
+- - -
+### Problem: vue-tsc type check fails on vue core when `compilerOptions.isolatedModules` flag in tsconfig is provided.
+
+- [TypeScript Compiler Options](https://vitejs.dev/guide/features.html#typescript-compiler-options)
+- [Github issue](https://github.com/vuejs/core/issues/1228#issuecomment-668978270)
+
+### Solution: Set `skipLibCheck.compilerOptions` to `true`.
+
+- - -
+### Problem: Props are not recognized in recursive component when building the proejct.
+
+- [Github issue](https://github.com/johnsoncodehk/volar/issues/394)
+- [Github issue](https://github.com/johnsoncodehk/volar/issues/644)
+
+### Solution: It's the limitation of TypeScript.  Use `defineAsyncComponent` to import recursive component instead of normal `import`.1
