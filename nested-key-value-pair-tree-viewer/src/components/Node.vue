@@ -29,13 +29,16 @@ div(class="text-lg")
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, defineAsyncComponent, type DefineComponent } from 'vue'
 import type { Tree } from '@/types/share'
-import Node from '@/components/Node.vue'
 
 interface Props {
   tree: Tree;
 }
+
+const Node = defineAsyncComponent<DefineComponent<Props>>(
+  () => import('@/components/Node.vue') as any
+)
 
 const props = defineProps<Props>()
 
