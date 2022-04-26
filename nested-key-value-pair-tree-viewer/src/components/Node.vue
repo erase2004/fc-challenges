@@ -15,6 +15,7 @@ div(class="text-lg")
       Node(
         v-for="node in Object.values(props.tree.children)"
         :tree="node"
+        :key="node.key"
       )
 
   //- node without children

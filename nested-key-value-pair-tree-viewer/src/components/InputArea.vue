@@ -6,7 +6,11 @@ div(class="w-full h-1/2 lg:w-1/2 lg:h-full border border-primary-500 overflow-hi
   //- input group list
   div(class="flex flex-col overflow-y-auto overflow-x-clip")
     //- input group
-    div(class="px-5 py-2 flex" v-for="index in groupList")
+    div(
+      class="px-5 py-2 flex"
+      v-for="index in groupList"
+      :key="index"
+    )
       div(class="grid grid-cols-2 gap-4 flex-grow mr-3")
         //- key input
         input(
