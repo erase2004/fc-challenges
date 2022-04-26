@@ -36,10 +36,14 @@ import type { Tree } from '@/types/share'
 import TreeView from '@/components/TreeView.vue'
 
 interface Data {
-  [key: string]: string
+  key: string;
+  value: string;
+}
+interface MapData {
+  [key: string]: string;
 }
 interface Props {
-  mounted: boolean
+  mounted: boolean;
 }
 
 const props = defineProps<Props>()
@@ -72,33 +76,32 @@ const defaultData: Data[] = [
   }
 ]
 
+const KEY_SEPERATOR = '.'
+
 const inputGroupIndex = ref<number>(0)
 const groupList = reactive<string[]>([])
-const keyInput = reactive<Data>({})
-const valueInput = reactive<Data>({})
+const keyInput = reactive<MapData>({})
+const valueInput = reactive<MapData>({})
 const tree: Tree = reactive({
   key: '',
   value: '',
   children: {}
 })
-const KEY_SEPERATOR = '.'
 
 for (const index in defaultData) {
   const data = defaultData[index]
   const indexString = index.toString()
+
   groupList.push(indexString)
   keyInput[indexString] = data.key
   valueInput[indexString] = data.value
+
   inputGroupIndex.value += 1
 }
 
-watch(keyInput, dataChangeHandle, { deep: true })
-watch(valueInput, dataChangeHandle, { deep: true })
-watch(mounted, dataChangeHandle)
-
-function checkKey (key: string): boolean {
+function checkKey (key: string, seperator: string): [boolean, string[]] {
   let isValid: boolean = true
-  const token = key.split(KEY_SEPERATOR)
+  const token = key.split(seperator)
 
   for (const t of token) {
     if (t === '') {
@@ -107,7 +110,7 @@ function checkKey (key: string): boolean {
     }
   }
 
-  return isValid
+  return [isValid, token]
 }
 
 function addTreeNode (tree: Tree, keyArray: string[], value: string, level: number): void {
@@ -161,14 +164,18 @@ async function dataChangeHandle () {
   for (const index of groupList) {
     const key = keyInput[index]
     const value = valueInput[index]
-    const isValidKey = checkKey(key)
+    const [isValidKey, keyArray] = checkKey(key, KEY_SEPERATOR)
 
     if (isValidKey === false) {
       continue
     } else {
-      addTreeNode(tree, key.split(KEY_SEPERATOR), value, 0)
+      addTreeNode(tree, keyArray, value, 0)
     }
   }
 }
+
+watch(keyInput, dataChangeHandle, { deep: true })
+watch(valueInput, dataChangeHandle, { deep: true })
+watch(mounted, dataChangeHandle)
 
 </script>
