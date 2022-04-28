@@ -17,9 +17,17 @@ div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
       span(class="absolute right-3 bottom-1/2 translate-y-3/4")
         ArrowDown(class="w-2 h-2")
     span
-      Grid(class="w-6 h-6 cursor-pointer format-active")
+      Grid(
+        class="w-6 h-6 cursor-pointer"
+        @click.stop="changeListFormat('card')"
+        :class="getFormatClass(uiStore.listFormat, 'card')"
+      )
     span
-      List(class="w-6 h-6 cursor-pointer format-inactive")
+      List(
+        class="w-6 h-6 cursor-pointer"
+        @click.stop="changeListFormat('list')"
+        :class="getFormatClass(uiStore.listFormat, 'list')"
+      )
 </template>
 
 <script setup lang="ts">
@@ -27,6 +35,19 @@ import ArrowUp from '@/components/icons/ArrowUp.vue'
 import ArrowDown from '@/components/icons/ArrowDown.vue'
 import Grid from '@/components/icons/Grid.vue'
 import List from '@/components/icons/List.vue'
+import { useStore } from '@/stores/ui'
+import { isSame } from '@/utils/helpers'
+
+const uiStore = useStore()
+
+function changeListFormat(format: string) {
+  uiStore.listFormat = format
+}
+
+function getFormatClass(input: string, format: string): string {
+  return `format-${isSame(input, format) ? 'active' : 'inactive'}`
+}
+
 </script>
 
 <style lang="postcss">

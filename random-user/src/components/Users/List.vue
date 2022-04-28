@@ -1,7 +1,7 @@
 <template lang="pug">
 div(class="flex flex-row h-full flex-shrink-1 flex-grow-0 overflow-x-clip overflow-y-auto")
   div(
-    v-if="format === 'list'"
+    v-if="uiStore.listFormat === 'list'"
     class="flex flex-col flex-grow gap-y-8"
   )
     div(
@@ -43,9 +43,11 @@ import { ref, reactive } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import HeartFill from '@/components/icons/HeartFill.vue'
 import HeartEmpty from '../icons/HeartEmpty.vue'
+import { useStore } from '@/stores/ui'
+
+const uiStore = useStore()
 
 let list = reactive<number[]>([])
-let format = ref<string>('list')
 
 for (let n = 0; n < 50; n += 1) {
   list.push(n)
