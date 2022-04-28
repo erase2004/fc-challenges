@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="flex flex-row flex-shrink-0 flex-nowrap justify-center gap-1")
+div(class="flex flex-row flex-shrink-0 flex-nowrap justify-center gap-1 mt-auto py-4")
   template(v-if="displayList.length > 0")
     //- more than length of display pages
     template(v-if="totalPage > displayLength")
