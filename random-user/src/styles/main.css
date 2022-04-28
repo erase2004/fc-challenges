@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .text-input {
-  @apply w-52 text-base p-2 border-2 border-solid border-[#b8c4cf] rounded-md;
+  @apply w-56 text-base p-2 border-2 border-solid border-[#b8c4cf] rounded-md;
 }
 
 .action-button-primary {
