@@ -1,9 +1,9 @@
 <template lang="pug">
-div(class="flex flex-row flex-shrink-0 justify-between items-center")
+div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
   span(class="flex flex-row font-bold gap-3 items-center")
     span(class="action-text-primary") ALL
     span(class="action-text-secondary") Favorite
-  span(class="flex flex-row items-center gap-2")
+  span(class="flex flex-row items-center gap-2 pr-2")
     span(class="relative")
       select(
         name="pagesize"
