@@ -144,7 +144,7 @@ function next() {
 
 <style lang="postcss">
 .item {
-  @apply inline-block w-8 h-8 font-bold text-center leading-8 bg-substrate;
+  @apply inline-block w-8 h-8 font-bold text-center leading-8 bg-substrate flex-shrink-0;
 }
 .page-item, .control-item {
   @apply item cursor-pointer;
