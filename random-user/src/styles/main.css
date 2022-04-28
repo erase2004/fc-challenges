@@ -11,8 +11,17 @@
   @apply hover:opacity-70;
 }
 
+.action-text {
+  @apply text-base font-bold my-2;
+  @apply border-b-2 border-solid cursor-pointer;
+}
+
 .action-text-primary {
-  @apply text-base m-2 text-primary font-bold;
+  @apply action-text text-primary border-[#b3b3ef];
   @apply hover:opacity-70;
-  @apply border-b-2 border-solid border-[#b3b3ef] cursor-pointer;
+}
+
+.action-text-secondary {
+  @apply action-text text-secondary border-[#e9e7fd];
+  @apply hover:text-primary hover:border-[#b3b3ef] hover:opacity-70;
 }
