@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
 
-export const useState = defineStore('main', {
+export const useStore = defineStore('main', {
 
 })
