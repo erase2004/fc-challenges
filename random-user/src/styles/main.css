@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.text-input {
+  @apply w-52 text-base p-2 border-2 border-solid border-[#b8c4cf] rounded-md;
+}
+
+.action-button-primary {
+  @apply text-base text-white bg-primary px-6 rounded-md;
+  @apply hover:opacity-70;
+}
+
+.action-text-primary {
+  @apply text-base m-2 text-primary font-bold;
+  @apply hover:opacity-70;
+  @apply border-b-2 border-solid border-[#b3b3ef] cursor-pointer;
+}
