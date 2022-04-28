@@ -35,6 +35,6 @@ import List from '@/components/icons/List.vue'
   @apply fill-[#e9a2ad] hover:fill-rose-300;
 }
 .format-inactive {
-  @apply fill-[#dfe6ed] hover:fill-slate-300;
+  @apply fill-substrate hover:fill-slate-300;
 }
 </style>

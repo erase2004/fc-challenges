@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="inline-block m-auto p-10 self-center bg-[#dfe6ed]")
+div(class="inline-block m-auto p-10 self-center bg-substrate")
   div(class="flex flex-col gap-y-6 ")
     Avatar(
       :imageUrl="imageUrl"
