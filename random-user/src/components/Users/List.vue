@@ -1,7 +1,7 @@
 <template lang="pug">
 div(class="flex flex-row h-full flex-shrink-1 flex-grow-0 overflow-x-clip overflow-y-auto")
   div(
-    v-if="uiStore.listFormat === 'list'"
+    v-if="uiStore.validListFormat === 'list'"
     class="flex flex-col flex-grow gap-y-8"
   )
     div(

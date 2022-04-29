@@ -1,17 +1,25 @@
 <template lang="pug">
 div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
   span(class="flex flex-row font-bold gap-3 items-center")
-    span(class="action-text-primary") ALL
-    span(class="action-text-secondary") Favorite
+    span(
+      v-for="tabName in VALID_TAB"
+      :key="tabName"
+      :class="getTabClass(uiStore.validTab, tabName)"
+      @click.stop="changeTab(tabName)"
+    ) {{ tabName }}
   span(class="flex flex-row items-center gap-2 pr-2")
     span(class="relative")
       select(
         name="pagesize"
         class="appearance-none bg-white py-1 pl-2 pr-6 border-2 border-solid border-[#c5ced6] rounded outline-none"
+        @change="changePageSize($event)"
       )
-        option(value="10" selected) 10
-        option(value="30") 30
-        option(value="50") 50
+        option(
+          v-for="(pageSize, index) in VALID_PAGE_SIZE"
+          :key="pageSize"
+          :value="pageSize"
+          :selected="pageSize === uiStore.validPageSize"
+        ) {{ pageSize }}
       span(class="absolute right-3 top-1/2 -translate-y-3/4")
         ArrowUp(class="w-2 h-2")
       span(class="absolute right-3 bottom-1/2 translate-y-3/4")
@@ -20,13 +28,13 @@ div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
       Grid(
         class="w-6 h-6 cursor-pointer"
         @click.stop="changeListFormat('card')"
-        :class="getFormatClass(uiStore.listFormat, 'card')"
+        :class="getFormatClass(uiStore.validListFormat, 'card')"
       )
     span
       List(
         class="w-6 h-6 cursor-pointer"
         @click.stop="changeListFormat('list')"
-        :class="getFormatClass(uiStore.listFormat, 'list')"
+        :class="getFormatClass(uiStore.validListFormat, 'list')"
       )
 </template>
 
@@ -37,15 +45,31 @@ import Grid from '@/components/icons/Grid.vue'
 import List from '@/components/icons/List.vue'
 import { useStore } from '@/stores/ui'
 import { isSame } from '@/utils/helpers'
+import { VALID_TAB, VALID_PAGE_SIZE } from '@/utils/constants'
 
 const uiStore = useStore()
+
+function getTabClass(input: string, tab: string): string {
+  return `action-text-${isSame(input, tab) ? 'primary' : 'secondary'}`
+}
+
+function getFormatClass(input: string, format: string): string {
+  return `format-${isSame(input, format) ? 'active' : 'inactive'}`
+}
+
+function changeTab(tab: string) {
+  uiStore.tab = tab
+}
 
 function changeListFormat(format: string) {
   uiStore.listFormat = format
 }
 
-function getFormatClass(input: string, format: string): string {
-  return `format-${isSame(input, format) ? 'active' : 'inactive'}`
+function changePageSize(event: Event) {
+  if (!event.target) return
+
+  const target = (<HTMLSelectElement>event.target)
+  uiStore.pageSize = target.value
 }
 
 </script>
