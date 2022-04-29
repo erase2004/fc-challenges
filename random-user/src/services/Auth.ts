@@ -1,6 +1,6 @@
-import { db, auth } from "@/utils/helpers";
+import { db, auth } from "@/utils/firebase";
 import { collection, addDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword  } from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import type { SignInUser, SignUpUser } from "@/types/share"
 
 const userCollection = collection(db, 'users')
