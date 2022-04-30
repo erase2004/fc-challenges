@@ -1,4 +1,5 @@
 import type { UserImportRecord } from 'firebase-admin/auth'
+import type { UserSource } from '@/utils/admin/classes';
 
 export interface SignInUser {
   password: string;
@@ -40,3 +41,5 @@ export interface RawUser {
     large: string;
   };
 };
+
+export type DataSource = UserSource

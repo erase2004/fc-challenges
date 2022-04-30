@@ -1,9 +1,9 @@
 
-import AuthService from '@/services/Admin/Auth'
-import type { Logger, UserSource } from '@/utils/admin/classes'
-import { uniq } from '@/utils/admin/helpers'
+import type AuthService from '@/services/Admin/Auth'
+import type { Logger } from '@/utils/admin/classes'
 import type { UserImportRecord } from 'firebase-admin/auth'
-import type { BulkUser } from '@/types/share'
+import type { BulkUser, DataSource } from '@/types/share'
+import { uniq } from '@/utils/admin/helpers'
 import { authSecretKey } from '@/secrets/firebaseConfig'
 import { SINGLE_CALL_LIMIT } from '@/utils/constants'
 
@@ -11,14 +11,12 @@ export default class AuthStorage {
   private USER_COUNT: number = 3010
   private BUFFERED_KEY: Buffer = Buffer.from(authSecretKey)
   private logger: Logger
-  private dataSource: UserSource
 
-  constructor(logger: Logger, dataSource: UserSource) {
+  constructor(logger: Logger) {
     this.logger = logger
-    this.dataSource = dataSource
   }
 
-  private async addUsers<T extends typeof AuthService>(service: T, users: BulkUser[]) {
+  async addUsers<T extends typeof AuthService>(service: T, users: BulkUser[]) {
     const passedRecords = []
 
     do {
@@ -47,7 +45,7 @@ export default class AuthStorage {
     return passedRecords
   }
 
-  private async getUsers<T extends typeof AuthService>(service: T) {
+  async getUsers<T extends typeof AuthService>(service: T) {
     const totalUsers = []
     let nextPageToken: string | undefined
 
@@ -60,7 +58,7 @@ export default class AuthStorage {
     return totalUsers
   }
 
-  private async deleteUsers<T extends typeof AuthService>(service: T, uids: string[]) {
+  async deleteUsers<T extends typeof AuthService>(service: T, uids: string[]) {
     do {
       const partition = uids.splice(0, SINGLE_CALL_LIMIT)
       const result = await service.deleteUsers(partition)
@@ -71,17 +69,17 @@ export default class AuthStorage {
     return true
   }
 
-  private async clear() {
-    const userList = await this.getUsers(AuthService)
+  async clear(service: typeof AuthService) {
+    const userList = await this.getUsers(service)
     const uids = userList.map(user => user.uid)
-    return await this.deleteUsers(AuthService, uids)
+    return await this.deleteUsers(service, uids)
   }
 
-  async initialize() {
+  async initialize(dataSource: DataSource, service: typeof AuthService) {
     let action = 'Clear Auth Users'
 
     this.logger.print('BEGIN', action)
-    await this.clear()
+    await this.clear(service)
     this.logger.print('END', action)
 
     let totalUsers: UserImportRecord[] = []
@@ -91,10 +89,10 @@ export default class AuthStorage {
 
     do {
       let count: number = this.USER_COUNT - totalUsers.length
-      let result = await this.dataSource.get(count)
+      let result = await dataSource.get(count)
 
       if (result.status === 'success') {
-        const passedRecords = await this.addUsers(AuthService, result.data)
+        const passedRecords = await this.addUsers(service, result.data)
 
         totalUsers.push(...passedRecords)
         totalUsers = uniq(totalUsers, 'uid')
