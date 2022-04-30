@@ -1,5 +1,5 @@
-import { db, auth } from '@/utils/admin/firebase'
-import { UserImportRecord, UserImportOptions, UserRecord } from 'firebase-admin/auth'
+import { auth } from '@/utils/admin/firebase'
+import { UserImportRecord, UserImportOptions } from 'firebase-admin/auth'
 
 type UserImportRecordExtended = UserImportRecord & {
   shouldRemove?: boolean | undefined;
