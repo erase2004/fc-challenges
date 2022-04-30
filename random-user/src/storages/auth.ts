@@ -17,6 +17,7 @@ export default class AuthStorage {
   }
 
   async addUsers<T extends typeof AuthService>(service: T, users: BulkUser[]) {
+    // use service to add users, and resturn success result
     const passedRecords = []
 
     do {
@@ -46,6 +47,7 @@ export default class AuthStorage {
   }
 
   async getUsers<T extends typeof AuthService>(service: T) {
+    // use service to retrieve users
     const totalUsers = []
     let nextPageToken: string | undefined
 
@@ -59,6 +61,7 @@ export default class AuthStorage {
   }
 
   async deleteUsers<T extends typeof AuthService>(service: T, uids: string[]) {
+    // use service to delete user by uid
     do {
       const partition = uids.splice(0, SINGLE_CALL_LIMIT)
       const result = await service.deleteUsers(partition)
@@ -70,12 +73,14 @@ export default class AuthStorage {
   }
 
   async clear(service: typeof AuthService) {
+    // use service to clear the Auth
     const userList = await this.getUsers(service)
     const uids = userList.map(user => user.uid)
     return await this.deleteUsers(service, uids)
   }
 
   async initialize(dataSource: DataSource, service: typeof AuthService) {
+    // clear Auth first, get users from dataSource, then add users to Auth
     let action = 'Clear Auth Users'
 
     this.logger.print('BEGIN', action)

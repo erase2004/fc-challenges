@@ -43,6 +43,8 @@ export class UserSource {
     status: 'success' | 'failed';
     data: BulkUser[]
   }> {
+    // use generatedCount to keep generated users count,
+    // so when getting users by count, the return result could be unique
     count = Math.min(Math.max(0, count), this.API_LIMIT)
     const page = Math.ceil(this.generatedCount / count) + 1 // 1 based index
     const url = `${this.fetchURL}&seed=${this.seed}&results=${count}&page=${page}`
