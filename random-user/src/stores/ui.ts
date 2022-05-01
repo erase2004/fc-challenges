@@ -1,10 +1,25 @@
 import { defineStore } from 'pinia'
 import storage from '@/utils/storage'
-import { getValidTab, getValidListFormat, getValidPageSize } from '@/utils/helpers'
+import { getValidOption } from '@/utils/helpers'
+import { VALID_TAB, VALID_LIST_FORMAT, VALID_PAGE_SIZE } from "@/utils/constants"
 
 const TAB_KEY = 'tab'
 const LIST_FORMAT_KEY = 'listFormat'
 const PAGE_SIZE_KEY = 'pageSize'
+
+function getValidTab(format: string | null) {
+  return getValidOption<string>(VALID_TAB, format)
+}
+
+function getValidListFormat(format: string | null) {
+  return getValidOption<string>(VALID_LIST_FORMAT, format)
+}
+
+function getValidPageSize(pageSize: number | string | null) {
+  pageSize = Number(pageSize)
+
+  return getValidOption<number>(VALID_PAGE_SIZE, pageSize)
+}
 
 export const useStore = () => {
   const store = defineStore('ui', {

@@ -1,10 +1,8 @@
-import { VALID_TAB, VALID_LIST_FORMAT, VALID_PAGE_SIZE } from "@/utils/constants"
-
 export function isSame(str1: string, str2: string) {
   return str1 === str2
 }
 
-function getValidOption<T>(options: T[], input: T | null): T {
+export function getValidOption<T>(options: T[], input: T | null): T {
   if (input === null) {
     return options[0]
   }
@@ -14,20 +12,6 @@ function getValidOption<T>(options: T[], input: T | null): T {
   } else {
     return options[0]
   }
-}
-
-export function getValidTab(format: string | null) {
-  return getValidOption<string>(VALID_TAB, format)
-}
-
-export function getValidListFormat(format: string | null) {
-  return getValidOption<string>(VALID_LIST_FORMAT, format)
-}
-
-export function getValidPageSize(pageSize: number | string | null) {
-  pageSize = Number(pageSize)
-
-  return getValidOption<number>(VALID_PAGE_SIZE, pageSize)
 }
 
 export function uniq<T extends object, U extends keyof T>(objectArray: T[], key: U) {
