@@ -4,7 +4,7 @@ div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
     span(
       v-for="tabName in VALID_TAB"
       :key="tabName"
-      :class="getTabClass(uiStore.validTab, tabName)"
+      :class="getTabClass(uiStore.getTab, tabName)"
       @click.stop="changeTab(tabName)"
     ) {{ tabName }}
   span(class="flex flex-row items-center gap-2 pr-2")
@@ -18,7 +18,7 @@ div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
           v-for="(pageSize, index) in VALID_PAGE_SIZE"
           :key="pageSize"
           :value="pageSize"
-          :selected="pageSize === uiStore.validPageSize"
+          :selected="pageSize === uiStore.getPageSize"
         ) {{ pageSize }}
       span(class="absolute right-3 top-1/2 -translate-y-3/4")
         ArrowUp(class="w-2 h-2")
@@ -28,13 +28,13 @@ div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
       Grid(
         class="w-6 h-6 cursor-pointer"
         @click.stop="changeListFormat('card')"
-        :class="getFormatClass(uiStore.validListFormat, 'card')"
+        :class="getFormatClass(uiStore.getListFormat, 'card')"
       )
     span
       List(
         class="w-6 h-6 cursor-pointer"
         @click.stop="changeListFormat('list')"
-        :class="getFormatClass(uiStore.validListFormat, 'list')"
+        :class="getFormatClass(uiStore.getListFormat, 'list')"
       )
 </template>
 
@@ -58,18 +58,18 @@ function getFormatClass(input: string, format: string): string {
 }
 
 function changeTab(tab: string) {
-  uiStore.tab = tab
+  uiStore.setTab(tab)
 }
 
 function changeListFormat(format: string) {
-  uiStore.listFormat = format
+  uiStore.setListFormat(format)
 }
 
 function changePageSize(event: Event) {
   if (!event.target) return
 
   const target = (<HTMLSelectElement>event.target)
-  uiStore.pageSize = target.value
+  uiStore.setPageSize(target.value)
 }
 
 </script>
