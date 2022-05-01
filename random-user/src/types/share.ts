@@ -1,5 +1,5 @@
 import type { UserImportRecord } from 'firebase-admin/auth'
-import type { UserSource } from '@/utils/admin/classes';
+import type { UserSource } from '@/backend/utils/classes';
 
 export interface SignInUser {
   password: string;
