@@ -1,5 +1,3 @@
-import { valueToNode } from "@babel/types"
-
 export default {
   get(key: string) {
     return localStorage.getItem(key)
