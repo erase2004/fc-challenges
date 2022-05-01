@@ -31,7 +31,7 @@ export interface RawUser {
   email: string;
   login: {
     username: string;
-    sha256: string;
+    password: string;
     salt: string;
   };
   dob: {

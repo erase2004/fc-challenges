@@ -4,12 +4,10 @@ import type { UserImportRecord } from 'firebase-admin/auth'
 import type { BulkUser, DataSource } from '@/types/share'
 import AuthService from '@/backend/services/auth'
 import { uniq } from '@/utils/helpers'
-import { authSecretKey } from '@/secrets/firebaseConfig'
 
 export default class AuthStorage {
   private SINGLE_CALL_LIMIT: number = 1000
   private USER_COUNT: number = 3010
-  private BUFFERED_KEY: Buffer = Buffer.from(authSecretKey)
   private logger: Logger
   private service: typeof AuthService
 
@@ -26,19 +24,17 @@ export default class AuthStorage {
     do {
       let partition = copyUsers.splice(0, this.SINGLE_CALL_LIMIT)
 
-      const record = partition.map((user: BulkUser): UserImportRecord => {
-        return {
-          uid: user.uid,
-          email: user.email,
-          passwordHash: user.passwordHash,
-          passwordSalt: user.passwordSalt
-        }
-      })
+      const record = partition.map((user: BulkUser): UserImportRecord => ({
+        uid: user.uid,
+        email: user.email,
+        passwordHash: user.passwordHash,
+        passwordSalt: user.passwordSalt
+      }))
 
       const successRecords = await this.service.addUsers(record, {
         hash: {
-          algorithm: 'HMAC_SHA256',
-          key: this.BUFFERED_KEY
+          algorithm: 'SHA256',
+          rounds: 1
         }
       })
 
