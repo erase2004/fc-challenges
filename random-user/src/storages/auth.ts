@@ -1,5 +1,5 @@
 
-import type AuthService from '@/services/Admin/Auth'
+import AuthService from '@/services/Admin/Auth'
 import type { Logger } from '@/utils/admin/classes'
 import type { UserImportRecord } from 'firebase-admin/auth'
 import type { BulkUser, DataSource } from '@/types/share'
@@ -11,13 +11,15 @@ export default class AuthStorage {
   private USER_COUNT: number = 3010
   private BUFFERED_KEY: Buffer = Buffer.from(authSecretKey)
   private logger: Logger
+  private service: typeof AuthService
 
-  constructor(logger: Logger) {
+  constructor(logger: Logger, service: typeof AuthService) {
     this.logger = logger
+    this.service = service
   }
 
-  async addUsers<T extends typeof AuthService>(service: T, users: BulkUser[]) {
-    // use service to add users, and resturn success result
+  async addUsers(users: BulkUser[]) {
+    // add users, and resturn success result
     const passedRecords = []
 
     do {
@@ -32,7 +34,7 @@ export default class AuthStorage {
         }
       })
 
-      const successRecords = await service.addUsers(record, {
+      const successRecords = await this.service.addUsers(record, {
         hash: {
           algorithm: 'HMAC_SHA256',
           key: this.BUFFERED_KEY
@@ -46,13 +48,13 @@ export default class AuthStorage {
     return passedRecords
   }
 
-  async getUsers<T extends typeof AuthService>(service: T) {
-    // use service to retrieve users
+  async getUsers() {
+    // retrieve users
     const totalUsers = []
     let nextPageToken: string | undefined
 
     do {
-      const result = await service.listUsers(SINGLE_CALL_LIMIT, nextPageToken)
+      const result = await this.service.listUsers(SINGLE_CALL_LIMIT, nextPageToken)
       totalUsers.push(...result.users)
       nextPageToken = result.nextPageToken
     } while (nextPageToken !== undefined);
@@ -60,11 +62,11 @@ export default class AuthStorage {
     return totalUsers
   }
 
-  async deleteUsers<T extends typeof AuthService>(service: T, uids: string[]) {
-    // use service to delete user by uid
+  async deleteUsers(uids: string[]) {
+    // delete user by uid
     do {
       const partition = uids.splice(0, SINGLE_CALL_LIMIT)
-      const result = await service.deleteUsers(partition)
+      const result = await this.service.deleteUsers(partition)
 
       uids.push(...result)
     } while (uids.length > 0);
@@ -72,19 +74,19 @@ export default class AuthStorage {
     return true
   }
 
-  async clear(service: typeof AuthService) {
+  async clear() {
     // use service to clear the Auth
-    const userList = await this.getUsers(service)
+    const userList = await this.getUsers()
     const uids = userList.map(user => user.uid)
-    return await this.deleteUsers(service, uids)
+    return await this.deleteUsers(uids)
   }
 
-  async initialize(dataSource: DataSource, service: typeof AuthService) {
+  async initialize(dataSource: DataSource) {
     // clear Auth first, get users from dataSource, then add users to Auth
     let action = 'Clear Auth Users'
 
     this.logger.print('BEGIN', action)
-    await this.clear(service)
+    await this.clear()
     this.logger.print('END', action)
 
     let totalUsers: UserImportRecord[] = []
@@ -97,7 +99,7 @@ export default class AuthStorage {
       let result = await dataSource.get(count)
 
       if (result.status === 'success') {
-        const passedRecords = await this.addUsers(service, result.data)
+        const passedRecords = await this.addUsers(result.data)
 
         totalUsers.push(...passedRecords)
         totalUsers = uniq(totalUsers, 'uid')
