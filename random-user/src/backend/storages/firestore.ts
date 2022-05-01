@@ -1,5 +1,5 @@
-import type { Logger } from '@/utils/admin/classes'
-import StoageService from '@/services/admin/firestore'
+import type { Logger } from '@/backend/utils/classes'
+import StoageService from '@/backend/services/firestore'
 
 export default class Store {
   private BATCH_SIZE: number = 500

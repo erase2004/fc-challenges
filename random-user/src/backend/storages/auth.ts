@@ -1,9 +1,9 @@
 
-import type { Logger } from '@/utils/admin/classes'
+import type { Logger } from '@/backend/utils/classes'
 import type { UserImportRecord } from 'firebase-admin/auth'
 import type { BulkUser, DataSource } from '@/types/share'
-import AuthService from '@/services/admin/auth'
-import { uniq } from '@/utils/admin/helpers'
+import AuthService from '@/backend/services/auth'
+import { uniq } from '@/utils/helpers'
 import { authSecretKey } from '@/secrets/firebaseConfig'
 
 export default class AuthStorage {

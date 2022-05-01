@@ -1,9 +1,9 @@
 
-import AuthStorage from '@/storages/auth'
-import AuthService from '@/services/admin/auth'
-import Store from '@/storages/firestore'
-import StoreService from '@/services/admin/firestore'
-import { Logger, UserSource } from '@/utils/admin/classes'
+import AuthStorage from '@/backend/storages/auth'
+import AuthService from '@/backend/services/auth'
+import Store from '@/backend/storages/firestore'
+import StoreService from '@/backend/services/firestore'
+import { Logger, UserSource } from '@/backend/utils/classes'
 
 const SEED = '114514'
 const logger = new Logger()

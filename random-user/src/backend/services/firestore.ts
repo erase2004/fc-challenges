@@ -1,6 +1,6 @@
 import type { Query } from 'firebase-admin/firestore';
 import { CollectionReference, DocumentData } from 'firebase-admin/firestore'
-import { db } from '@/utils/admin/firebase'
+import { db } from '@/backend/utils/firebase'
 
 type Resolve = (value: boolean) => void
 type Reject = (value: boolean) => void
