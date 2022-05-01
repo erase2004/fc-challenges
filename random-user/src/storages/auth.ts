@@ -1,13 +1,13 @@
 
-import AuthService from '@/services/Admin/Auth'
 import type { Logger } from '@/utils/admin/classes'
 import type { UserImportRecord } from 'firebase-admin/auth'
 import type { BulkUser, DataSource } from '@/types/share'
+import AuthService from '@/services/admin/auth'
 import { uniq } from '@/utils/admin/helpers'
 import { authSecretKey } from '@/secrets/firebaseConfig'
-import { SINGLE_CALL_LIMIT } from '@/utils/constants'
 
 export default class AuthStorage {
+  private SINGLE_CALL_LIMIT: number = 1000
   private USER_COUNT: number = 3010
   private BUFFERED_KEY: Buffer = Buffer.from(authSecretKey)
   private logger: Logger
@@ -19,15 +19,16 @@ export default class AuthStorage {
   }
 
   async addUsers(users: BulkUser[]) {
-    // add users, and resturn success result
-    const passedRecords = []
+    // add users, and return success result
+    const set = new Set()
+    const copyUsers = [...users]
 
     do {
-      let partition = users.splice(0, SINGLE_CALL_LIMIT)
+      let partition = copyUsers.splice(0, this.SINGLE_CALL_LIMIT)
 
       const record = partition.map((user: BulkUser): UserImportRecord => {
         return {
-          uid: user.email,
+          uid: user.uid,
           email: user.email,
           passwordHash: user.passwordHash,
           passwordSalt: user.passwordSalt
@@ -41,11 +42,13 @@ export default class AuthStorage {
         }
       })
 
-      passedRecords.push(...successRecords)
+      successRecords.forEach((user) => {
+        set.add(user.uid)
+      })
 
-    } while (users.length > 0);
+    } while (copyUsers.length > 0);
 
-    return passedRecords
+    return users.filter(user => set.has(user.uid))
   }
 
   async getUsers() {
@@ -54,7 +57,7 @@ export default class AuthStorage {
     let nextPageToken: string | undefined
 
     do {
-      const result = await this.service.listUsers(SINGLE_CALL_LIMIT, nextPageToken)
+      const result = await this.service.listUsers(this.SINGLE_CALL_LIMIT, nextPageToken)
       totalUsers.push(...result.users)
       nextPageToken = result.nextPageToken
     } while (nextPageToken !== undefined);
@@ -65,7 +68,7 @@ export default class AuthStorage {
   async deleteUsers(uids: string[]) {
     // delete user by uid
     do {
-      const partition = uids.splice(0, SINGLE_CALL_LIMIT)
+      const partition = uids.splice(0, this.SINGLE_CALL_LIMIT)
       const result = await this.service.deleteUsers(partition)
 
       uids.push(...result)
@@ -89,7 +92,7 @@ export default class AuthStorage {
     await this.clear()
     this.logger.print('END', action)
 
-    let totalUsers: UserImportRecord[] = []
+    let totalUsers: BulkUser[] = []
 
     action = 'Create Auth Users'
     this.logger.print('BEGIN', action)

@@ -55,7 +55,7 @@ export class UserSource {
       const users = await response.json()
 
       const data = users.results.map((user: RawUser): BulkUser => ({
-        uid:  user.login.username,
+        uid:  user.email,
         email: user.email,
         passwordHash: Buffer.from(user.login.sha256),
         passwordSalt: Buffer.from(user.login.salt),
