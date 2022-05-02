@@ -5,6 +5,7 @@ div(class="inline-block m-auto p-10 self-center bg-substrate")
     @submit.stop.prevent="handleSubmit"
   )
     Avatar(
+      v-if="imageUrl"
       :imageUrl="imageUrl"
       @failed="setFieldError('imageUrl', 'invalid avatar url')"
       class="self-center"
@@ -108,7 +109,7 @@ import Avatar from '@/components/Avatar.vue';
 import authService from '@/services/auth'
 import * as yup from 'yup'
 import { useForm, useField } from 'vee-validate'
-import { ref } from 'vue'
+import { ref, toRef } from 'vue'
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
@@ -116,7 +117,7 @@ const isProcessing = ref<boolean>(false)
 const genderOptions = ['male', 'female', 'other']
 
 const schema = yup.object({
-  imageUrl: yup.string().default('').url(),
+  imageUrl: yup.string().optional().url(),
   email: yup.string().required().email(),
   name: yup.string().required().min(1), // name min length is 1
   password: yup.string().required().min(6), // password min length is 6 (firebase/auth requirements)

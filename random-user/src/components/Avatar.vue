@@ -14,7 +14,7 @@ div(class="w-32 h-32 rounded-full bg-slate-400")
 import { ref, watch } from 'vue'
 
 interface Props {
-  imageUrl: string;
+  imageUrl: string | undefined;
 }
 interface Emits {
   (e: 'failed'): void;
