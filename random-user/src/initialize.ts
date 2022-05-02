@@ -14,6 +14,7 @@ async function initialize() {
   const mapUsers = users.map(user => ({
     uid: user.uid,
     email: user.email,
+    name: user.name,
     avatar: user.avatar,
     gender: user.gender,
     age: user.age
