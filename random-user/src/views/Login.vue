@@ -27,7 +27,10 @@ div(class="inline-block m-auto p-10 self-center bg-substrate")
       )
       div(class="input-error") {{ errors.password }}
     div(class="flex flex-row justify-between")
-      span(class="action-text-primary") Register
+      span(
+        class="action-text-primary"
+        @click.stop="router.push({'name': 'register'})"
+      ) Register
       button(
         class="action-button-primary"
         type="submit"
@@ -73,9 +76,6 @@ async function handleSubmit() {
       email: email.value,
       password: password.value
     })
-
-    const token = await user.getIdToken()
-    userStore.setToken(token)
 
     router.push({'name': 'user-list'})
 
