@@ -1,24 +1,14 @@
-import { db, auth } from "@/utils/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { auth } from "@/utils/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import type { SignInUser, SignUpUser } from "@/types/share"
 
-const userCollection = collection(db, 'users')
-
 export default {
   async signUp(data: SignUpUser) {
-    const { email, password, name, avatar } = data
+    const { email, password, name, avatar, gender, age } = data
 
-    const { user: { uid } } = await createUserWithEmailAndPassword(auth, email, password)
+    const resp = await createUserWithEmailAndPassword(auth, email, password)
 
-    const docRef = await addDoc(userCollection, {
-      uid,
-      name,
-      email,
-      avatar
-    })
-
-    return true
+    return resp
   },
   async signIn(data: SignInUser) {
     const { email, password } = data
