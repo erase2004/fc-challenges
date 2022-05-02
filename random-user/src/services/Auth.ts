@@ -1,12 +1,22 @@
 import { auth } from "@/utils/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth"
+import storeService from '@/services/firestore'
 import type { SignInUser, SignUpUser } from "@/types/share"
 
 export default {
   async signUp(data: SignUpUser) {
-    const { email, password, name, avatar, gender, age } = data
+    const { email, password, name, avatar = '', gender, age } = data
 
     const resp = await createUserWithEmailAndPassword(auth, email, password)
+
+    await storeService.setDoc('users', {
+      age,
+      avatar,
+      email,
+      gender,
+      name,
+      uid: email
+    }, email)
 
     return resp
   },

@@ -41,16 +41,14 @@ router.beforeEach(async (to, from, next) => {
     // access authenication required routes without authenication
 
     next({name: 'login'})
-  } else if (requireAuth === false) {
-    // access autheincation free routes
-
-    if (currentUser) {
-      // has authenication
-
-      next({name: 'user-list'})
+  } else {
+    if (requireAuth === false) {
+      if (currentUser) {
+        next({name: 'user-list'})
+      } else {
+        next()
+      }
     } else {
-      // without authenication
-
       next()
     }
   }
