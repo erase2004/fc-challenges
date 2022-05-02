@@ -1,8 +1,6 @@
 
 import AuthStorage from '@/backend/storages/auth'
-import AuthService from '@/backend/services/auth'
 import Store from '@/backend/storages/firestore'
-import StoreService from '@/backend/services/firestore'
 import { Logger, UserSource } from '@/backend/utils/classes'
 
 const SEED = '114514'
@@ -10,7 +8,7 @@ const logger = new Logger()
 
 async function initialize() {
   const userSource = new UserSource(SEED, logger)
-  const authStorage = new AuthStorage(logger, AuthService)
+  const authStorage = new AuthStorage(logger)
 
   const users = await authStorage.initialize(userSource)
   const mapUsers = users.map(user => ({
@@ -21,11 +19,13 @@ async function initialize() {
     age: user.age
   }))
 
-  const userStorage = new Store('users', logger, StoreService)
-  await userStorage.initialize(mapUsers, 'uid')
+  const userStorage = new Store('users', logger)
+  const favoriteStorage = new Store('favorite', logger)
 
-  const favoriteStorage = new Store('favorite', logger, StoreService)
-  await favoriteStorage.initialize([], '')
+  await Promise.all([
+    userStorage.initialize(mapUsers, 'uid'),
+    favoriteStorage.initialize([], '')
+  ])
 
   logger.print('END', 'Initialize Task Finished')
 }

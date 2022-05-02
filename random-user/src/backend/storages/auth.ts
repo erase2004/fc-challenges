@@ -9,11 +9,10 @@ export default class AuthStorage {
   private SINGLE_CALL_LIMIT: number = 1000
   private USER_COUNT: number = 3010
   private logger: Logger
-  private service: typeof AuthService
+  private service = AuthService
 
-  constructor(logger: Logger, service: typeof AuthService) {
+  constructor(logger: Logger) {
     this.logger = logger
-    this.service = service
   }
 
   async addUsers(users: BulkUser[]) {

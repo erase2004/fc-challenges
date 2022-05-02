@@ -4,13 +4,13 @@ import StoageService from '@/backend/services/firestore'
 export default class Store {
   private BATCH_SIZE: number = 500
   private logger: Logger
-  private service: typeof StoageService
+  private service = StoageService
   private name: string
 
-  constructor(name: string, logger: Logger, service: typeof StoageService) {
+  constructor(name: string, logger: Logger) {
     this.name = name
     this.logger = logger
-    this.service = service
+    this.service
   }
 
   async addRecords<T extends object, U extends keyof T>(records: T[], recordKey: U) {
