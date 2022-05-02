@@ -1,5 +1,5 @@
 import { auth } from "@/utils/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth"
 import type { SignInUser, SignUpUser } from "@/types/share"
 
 export default {
@@ -21,6 +21,14 @@ export default {
     const resp = await signOut(auth)
 
     return resp
+  },
+  async getCurrentUser() {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = onAuthStateChanged(auth, user => {
+        unsubscribe();
+        resolve(user);
+      }, reject);
+    })
   }
 }
 
