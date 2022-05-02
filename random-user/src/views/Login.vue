@@ -4,6 +4,7 @@ div(class="inline-block m-auto p-10 self-center bg-substrate")
     class="flex flex-col gap-y-4"
     @submit.stop.prevent="handleSubmit"
   )
+    //- email input
     div(class="w-56")
       input(
         class="text-input"
@@ -14,6 +15,7 @@ div(class="inline-block m-auto p-10 self-center bg-substrate")
         :disabled="isProcessing"
       )
       div(class="input-error") {{ errors.email }}
+    //- password input
     div(class="w-56")
       input(
         class="text-input"
@@ -48,7 +50,7 @@ const isProcessing = ref<boolean>(false)
 
 const schema = yup.object({
   email: yup.string().required().email(),
-  password: yup.string().required().min(6)
+  password: yup.string().required().min(6) // password min length is 6 (firebase/auth requirements)
 })
 
 const { errors, meta, setFieldError } = useForm({
@@ -66,6 +68,7 @@ async function handleSubmit() {
   isProcessing.value = true
 
   try {
+    // login success, get user info
     const user = await authService.signIn({
       email: email.value,
       password: password.value
@@ -77,6 +80,7 @@ async function handleSubmit() {
     router.push({'name': 'user-list'})
 
   } catch (error: unknown) {
+    // login failed, throw an error
     const { code } = error as AuthError
 
     switch (code) {
@@ -96,6 +100,7 @@ async function handleSubmit() {
         console.error(error)
         break;
     }
+
   } finally {
     isProcessing.value = false
   }
