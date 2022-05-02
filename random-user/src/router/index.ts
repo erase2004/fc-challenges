@@ -37,10 +37,22 @@ router.beforeEach(async (to, from, next) => {
   const requireAuth = to.matched.some(record => record.meta.requireAuth)
   const currentUser = await authService.getCurrentUser()
 
-  if (requireAuth && !currentUser) {
+  if (requireAuth === true && !currentUser) {
+    // access authenication required routes without authenication
+
     next({name: 'login'})
-  } else {
-    next()
+  } else if (requireAuth === false) {
+    // access autheincation free routes
+
+    if (currentUser) {
+      // has authenication
+
+      next({name: 'user-list'})
+    } else {
+      // without authenication
+
+      next()
+    }
   }
 })
 
