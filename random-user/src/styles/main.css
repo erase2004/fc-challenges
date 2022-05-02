@@ -24,6 +24,7 @@
 .action-text-primary {
   @apply action-text text-primary border-[#b3b3ef];
   @apply hover:opacity-70;
+  @apply disabled:opacity-70 disabled:cursor-not-allowed;
 }
 
 .action-text-secondary {

@@ -1,5 +1,5 @@
 import { auth } from "@/utils/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import type { SignInUser, SignUpUser } from "@/types/share"
 
 export default {
@@ -16,6 +16,11 @@ export default {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
 
     return user
+  },
+  async signOut() {
+    const resp = await signOut(auth)
+
+    return resp
   }
 }
 
