@@ -5,6 +5,8 @@ div(class="w-32 h-32 rounded-full bg-slate-400")
     :src="selfImageUrl"
     @error="handleError"
     class="w-full h-full rounded-full object-cover"
+    loading="lazy"
+    decoding="async"
   )
 </template>
 
