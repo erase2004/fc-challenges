@@ -5,13 +5,13 @@ import { auth } from '@/utils/firebase'
 import authService from '@/services/auth'
 import storeService from '@/services/firestore'
 import storage from '@/utils/storage'
-
-const USERNAME_KEY = 'userName'
+import { USERNAME_KEY, UID_KEY } from '@/utils/constants'
 
 export const useStore = () => {
   const store = defineStore('user', {
     state: () => ({
-      name: storage.get(USERNAME_KEY) || ''
+      name: storage.get(USERNAME_KEY) || '',
+      uid: storage.get(UID_KEY) || ''
     }),
     getters: {
 
@@ -36,7 +36,9 @@ export const useStore = () => {
 
         if (userData) {
           this.name = userData.name
+          this.uid = userData.email
           storage.set(USERNAME_KEY, this.name)
+          storage.set(UID_KEY, this.uid)
         }
       }
     }

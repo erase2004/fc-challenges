@@ -11,11 +11,7 @@ import storage from '@/utils/storage'
 import authService from '@/services/auth'
 import storeService from '@/services/firestore'
 import { getValidOption } from '@/utils/helpers'
-import { VALID_TAB, VALID_PAGE_SIZE } from "@/utils/constants"
-
-const TAB_KEY = 'tab'
-const PAGE_SIZE_KEY = 'pageSize'
-const CURRENT_KEY = 'current'
+import { VALID_TAB, VALID_PAGE_SIZE, TAB_KEY, PAGE_SIZE_KEY, CURRENT_KEY } from "@/utils/constants"
 
 function getValidTab(format: string | null) {
   return getValidOption<string>(VALID_TAB, format)

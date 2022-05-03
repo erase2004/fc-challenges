@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import storage from '@/utils/storage'
 import { getValidOption } from '@/utils/helpers'
-import { VALID_LIST_FORMAT } from "@/utils/constants"
-
-const LIST_FORMAT_KEY = 'listFormat'
+import { VALID_LIST_FORMAT, LIST_FORMAT_KEY } from "@/utils/constants"
 
 function getValidListFormat(format: string | null) {
   return getValidOption<string>(VALID_LIST_FORMAT, format)
