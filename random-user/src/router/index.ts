@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import authService from '@/services/auth'
+import { useStore } from '@/stores/ui'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -34,6 +35,9 @@ const router = createRouter({
 
 // navigation guard, protect annoymous user from access authenicaton required routes
 router.beforeEach(async (to, from, next) => {
+  const uiStore = useStore()
+  uiStore.pageLoading = true
+
   const requireAuth = to.matched.some(record => record.meta.requireAuth)
   const currentUser = await authService.getCurrentUser()
 
@@ -52,6 +56,11 @@ router.beforeEach(async (to, from, next) => {
       next()
     }
   }
+})
+
+router.afterEach((to, from) => {
+  const uiStore = useStore()
+  uiStore.pageLoading = false
 })
 
 export default router

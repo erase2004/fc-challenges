@@ -27,6 +27,7 @@ export const useStore = () => {
       'tab': '',
       'listFormat': '',
       'pageSize': 0,
+      'pageLoading': true
     }),
     getters: {
       getTab(state): string {
