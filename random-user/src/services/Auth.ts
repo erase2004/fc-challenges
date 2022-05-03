@@ -1,7 +1,8 @@
+import type { SignInUser, SignUpUser } from "@/types/share"
+import type { User } from "@firebase/auth"
 import { auth } from "@/utils/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth"
 import storeService from '@/services/firestore'
-import type { SignInUser, SignUpUser } from "@/types/share"
 
 export default {
   async signUp(data: SignUpUser) {
@@ -32,7 +33,7 @@ export default {
 
     return resp
   },
-  async getCurrentUser() {
+  async getCurrentUser(): Promise<User | null> {
     return new Promise((resolve, reject) => {
       const unsubscribe = onAuthStateChanged(auth, user => {
         unsubscribe();

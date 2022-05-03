@@ -53,8 +53,8 @@ export const useStore = () => {
     } else {
       // logout
 
-      s.name = ''
       storage.remove(USERNAME_KEY)
+      s.$reset()
     }
   })
 
