@@ -53,6 +53,7 @@ import { useStore as useListStore } from '@/stores/list'
 
 const uiStore = useUIStore()
 const listStore = useListStore()
+listStore.initialize()
 const { loading: listLoading } = storeToRefs(listStore)
 
 </script>
