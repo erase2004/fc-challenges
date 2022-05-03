@@ -14,6 +14,7 @@ div(class="flex flex-row flex-shrink-0 flex-nowrap justify-center gap-1 mt-auto 
           v-if="isValid(page)"
           class="page-item"
           :class="{'active': page === current}"
+          @click.stop="open(page)"
         ) {{ page }}
         span(
           v-else
@@ -38,6 +39,7 @@ div(class="flex flex-row flex-shrink-0 flex-nowrap justify-center gap-1 mt-auto 
         :key="page"
         class="page-item"
         :class="{'active': page === current}"
+        @click.stop="open(page)"
       ) {{ page }}
 
       span(
@@ -56,18 +58,15 @@ div(class="flex flex-row flex-shrink-0 flex-nowrap justify-center gap-1 mt-auto 
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { useStore } from '@/stores/list';
 
 const controlDisplayMin = 1
 const displayLength = 7
 
-// const totalPage = ref<number>(3)
-// const totalPage = ref<number>(6)
-const totalPage = ref<number>(7)
-// const totalPage = ref<number>(8)
-// const totalPage = ref<number>(12)
-
-const current = ref<number>(1)
+const listStore = useStore()
+const { totalPage, current } = storeToRefs(listStore)
 
 const displayList = computed(() => {
   let pageList: number[] = []
@@ -127,18 +126,29 @@ function reachEnd(page: number, boundary: number) {
   return page == boundary
 }
 
+function open(page: number) {
+  if (page < 1 || page > totalPage.value) {
+    return
+  }
+
+  listStore.setCurrent(page)
+  listStore.setDisplayData()
+}
+
 function prev() {
   if (current.value <= 1) {
     return
   }
-  current.value -= 1
+  listStore.setCurrent(current.value - 1)
+  listStore.setDisplayData()
 }
 
 function next() {
   if (current.value >= totalPage.value) {
     return
   }
-  current.value += 1
+  listStore.setCurrent(current.value + 1)
+  listStore.setDisplayData()
 }
 </script>
 

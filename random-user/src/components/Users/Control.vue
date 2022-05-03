@@ -4,7 +4,7 @@ div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
     span(
       v-for="tabName in VALID_TAB"
       :key="tabName"
-      :class="getTabClass(uiStore.getTab, tabName)"
+      :class="getTabClass(listStore.getTab, tabName)"
       @click.stop="changeTab(tabName)"
     ) {{ tabName }}
   span(class="flex flex-row items-center gap-2 pr-2")
@@ -18,7 +18,7 @@ div(class="flex flex-row flex-shrink-0 justify-between items-center py-2")
           v-for="(pageSize, index) in VALID_PAGE_SIZE"
           :key="pageSize"
           :value="pageSize"
-          :selected="pageSize === uiStore.getPageSize"
+          :selected="pageSize === listStore.getPageSize"
         ) {{ pageSize }}
       span(class="absolute right-3 top-1/2 -translate-y-3/4")
         ArrowUp(class="w-2 h-2")
@@ -43,11 +43,13 @@ import ArrowUp from '@/components/icons/ArrowUp.vue'
 import ArrowDown from '@/components/icons/ArrowDown.vue'
 import Grid from '@/components/icons/Grid.vue'
 import List from '@/components/icons/List.vue'
-import { useStore } from '@/stores/ui'
+import { useStore as useUIStore } from '@/stores/ui'
+import { useStore as useListStore } from '@/stores/list'
 import { isSame } from '@/utils/helpers'
 import { VALID_TAB, VALID_PAGE_SIZE } from '@/utils/constants'
 
-const uiStore = useStore()
+const uiStore = useUIStore()
+const listStore = useListStore()
 
 function getTabClass(input: string, tab: string): string {
   return `action-text-${isSame(input, tab) ? 'primary' : 'secondary'}`
@@ -58,7 +60,9 @@ function getFormatClass(input: string, format: string): string {
 }
 
 function changeTab(tab: string) {
-  uiStore.setTab(tab)
+  listStore.setTab(tab)
+  listStore.setCurrent(1)
+  listStore.setDisplayData()
 }
 
 function changeListFormat(format: string) {
@@ -69,7 +73,9 @@ function changePageSize(event: Event) {
   if (!event.target) return
 
   const target = (<HTMLSelectElement>event.target)
-  uiStore.setPageSize(target.value)
+  listStore.setPageSize(target.value)
+  listStore.setCurrent(1)
+  listStore.setDisplayData()
 }
 
 </script>
