@@ -61,56 +61,55 @@ export const useStore = () => {
         this.current = current
         storage.set(CURRENT_KEY, this.current.toString())
       },
-      fetch() {
-        const userQuery = query(storeService.getCollection('users'))
+      async fetch() {
+        // get user list and related favorite data
+        this.loading = true
 
-        const unSubscribtion = onSnapshot(userQuery, async (snap) => {
-          this.loading = true
+        try {
+          const userQuery = query(storeService.getCollection('users'))
 
-          try {
-            if (!snap.empty) {
-              const user = await authService.getCurrentUser()
+          const [user, userSnap] = await Promise.all([authService.getCurrentUser(), storeService.getDocs(userQuery)])
 
-              if (!user) {
-                this.loading = false
-                return
-              }
-
-              const favorites: string[] = []
-              const favoriteQuery = query(storeService.getCollection('favorites'), where('uid', '==', user.email!))
-              const favoriteSnap = await storeService.getDocs(favoriteQuery)
-
-              if (!favoriteSnap.empty) {
-                favoriteSnap.forEach(docSnap => {
-                  const doc = docSnap.data()
-                  favorites.push(doc.target)
-                })
-              }
-
-              this.data = []
-              this.favoriteData = []
-
-              snap.forEach(docSnap => {
-                const doc = docSnap.data()
-                doc.id = docSnap.id
-                doc.isFavorite = favorites.includes(doc.email)
-
-                if (doc.isFavorite === true) {
-                  this.favoriteData = [...this.favoriteData, doc]
-                }
-
-                this.data = [...this.data, doc]
-              })
-
-              this.setDisplayData()
-            }
-          } catch (error) {
-            throw error
-          } finally {
+          if (!user || userSnap.empty) {
             this.loading = false
-            unSubscribtion()
+            return
           }
-        })
+
+          const favorites: string[] = []
+          const favoriteQuery = query(storeService.getCollection('favorites'), where('uid', '==', user.email!))
+          const favoriteSnap = await storeService.getDocs(favoriteQuery)
+
+          if (!favoriteSnap.empty) {
+            favoriteSnap.forEach(docSnap => {
+              const doc = docSnap.data()
+              favorites.push(doc.target)
+            })
+          }
+
+          this.data = []
+          this.favoriteData = []
+
+          userSnap.forEach(docSnap => {
+            const doc = docSnap.data()
+            doc.id = docSnap.id
+            doc.isFavorite = favorites.includes(doc.email)
+
+            if (doc.isFavorite === true) {
+              this.favoriteData = [...this.favoriteData, doc]
+            }
+
+            this.data = [...this.data, doc]
+          })
+
+          this.setDisplayData()
+
+        } catch (error) {
+
+          throw error
+        } finally {
+
+          this.loading = false
+        }
       },
       setDisplayData() {
         const start = this.pageSize * (this.current - 1)
