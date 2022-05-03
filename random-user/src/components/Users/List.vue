@@ -4,6 +4,7 @@ div(class="flex flex-row h-full flex-shrink-1 flex-grow-0 overflow-x-clip overfl
     v-if="uiStore.getListFormat === 'list'"
     class="flex flex-col flex-grow gap-y-8"
   )
+    //- list format
     div(
       v-for="user in listStore.displayData"
       :key="user.uid"
@@ -15,20 +16,13 @@ div(class="flex flex-row h-full flex-shrink-1 flex-grow-0 overflow-x-clip overfl
       )
       div(class="flex flex-col flex-grow flex-shrink justify-center text-lg font-semibold leading-tight overflow-hidden px-4")
         div(class="inline-block") {{ user.name }}
-      div(class="inline-block flex-shrink-0 w-6 h-6 absolute right-4 bottom-4 cursor-pointer")
-        HeartFill(
-          v-if="user.isFavorite"
-          class="fill-[#4b5c6b]"
-        )
-        HeartEmpty(
-          v-else
-          class="fill-[#4b5c6b]"
-        )
+      FavoriteButton(:user="user")
 
   div(
     v-else
     class="flex flex-row flex-wrap gap-x-6 gap-y-8"
   )
+    //- card format
     div(
       v-for="user in listStore.displayData"
       :key="user.uid"
@@ -39,15 +33,9 @@ div(class="flex flex-row h-full flex-shrink-1 flex-grow-0 overflow-x-clip overfl
         class="leading-tight overflow-hidden text-ellipsis line-clamp-[2] my-3 mx-auto"
         title="aaaa bbbb cccc ddd eeee ffff"
       ) {{ user.name }}
-      div(class="block w-6 h-6 absolute right-4 bottom-4 cursor-pointer")
-        HeartFill(
-          v-if="user.isFavorite"
-          class="fill-[#4b5c6b]"
-        )
-        HeartEmpty(
-          v-else
-          class="fill-[#4b5c6b]"
-        )
+      FavoriteButton(:user="user")
+
+  //- list data loading animation
   Loading(
     :loading="listLoading"
     loadingText="Data Loading ..."
@@ -59,8 +47,7 @@ div(class="flex flex-row h-full flex-shrink-1 flex-grow-0 overflow-x-clip overfl
 import { storeToRefs } from 'pinia'
 import Loading from '@/components/Loading.vue'
 import Avatar from '@/components/Avatar.vue'
-import HeartFill from '@/components/icons/HeartFill.vue'
-import HeartEmpty from '../icons/HeartEmpty.vue'
+import FavoriteButton from '@/components/Users/FavoriteButton.vue'
 import { useStore as useUIStore } from '@/stores/ui'
 import { useStore as useListStore } from '@/stores/list'
 
