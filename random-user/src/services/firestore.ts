@@ -35,6 +35,7 @@ export default {
   },
   async addFavorite(sourceUserName: string, targetUserName: string) {
     try {
+      // check favorite record if exists
       const existQuery = query(
         this.getCollection('favorites'),
         where('source', '==', sourceUserName),
@@ -47,6 +48,7 @@ export default {
         return true
       }
 
+      // add favorite record while favorite record doesn't present
       await this.setDoc('favorites', {
         source: sourceUserName,
         target: targetUserName
@@ -72,10 +74,11 @@ export default {
         return true
       }
 
+      // use writeBatch to remove favorite records
       const docs = [...existSnap.docs]
       do {
         const batch = writeBatch(db)
-        const partition = docs.splice(0, 500)
+        const partition = docs.splice(0, 500) // 500 is the limit of per writeBatch call
 
         partition.forEach(snapDoc => {
           batch.delete(snapDoc.ref)

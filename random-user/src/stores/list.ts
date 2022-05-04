@@ -2,7 +2,6 @@ import type {
   DocumentData
 } from '@firebase/firestore'
 import {
-  onSnapshot,
   query,
   where
 } from '@firebase/firestore'

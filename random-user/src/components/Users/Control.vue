@@ -62,6 +62,7 @@ function getFormatClass(input: string, format: string): string {
 function changeTab(tab: string) {
   listStore.setTab(tab)
   listStore.setCurrent(1)
+  // change tab now trigger data loading animation
   listStore.fetch()
 }
 
