@@ -66,9 +66,9 @@ export const useStore = defineStore('list', {
       this.setCurrent(storage.get(CURRENT_KEY))
       this.fetch()
     },
-    async fetch() {
+    async fetch(withoutLoading?: boolean) {
       // get user list and related favorite data
-      this.loading = true
+      this.loading = (withoutLoading === true) ? false : true
 
       try {
         const userQuery = query(storeService.getCollection('users'))
@@ -81,7 +81,7 @@ export const useStore = defineStore('list', {
         }
 
         const favorites: string[] = []
-        const favoriteQuery = query(storeService.getCollection('favorites'), where('uid', '==', user.email!))
+        const favoriteQuery = query(storeService.getCollection('favorites'), where('source', '==', user.email!))
         const favoriteSnap = await storeService.getDocs(favoriteQuery)
 
         if (!favoriteSnap.empty) {

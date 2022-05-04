@@ -62,7 +62,7 @@ function getFormatClass(input: string, format: string): string {
 function changeTab(tab: string) {
   listStore.setTab(tab)
   listStore.setCurrent(1)
-  listStore.setDisplayData()
+  listStore.fetch()
 }
 
 function changeListFormat(format: string) {
