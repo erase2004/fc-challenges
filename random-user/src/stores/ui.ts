@@ -10,7 +10,8 @@ function getValidListFormat(format: string | null) {
 export const useStore = defineStore('ui', {
   state: () => ({
     'listFormat': '',
-    'pageLoading': true
+    'pageLoading': true,
+    'favoriteIDs': [] as string[]
   }),
   getters: {
     getListFormat(state): string {

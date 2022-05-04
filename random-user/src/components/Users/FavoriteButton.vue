@@ -22,12 +22,14 @@ div(
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 import type { DocumentData } from '@firebase/firestore'
 import HeartFill from '@/components/icons/HeartFill.vue'
 import HeartEmpty from '@/components/icons/HeartEmpty.vue'
 import { useStore as useUserStore } from '@/stores/user'
 import { useStore as useListStore } from '@/stores/list'
+import { useStore as useUIStore} from '@/stores/ui'
 import storeService from '@/services/firestore'
 
 interface Props {
@@ -35,17 +37,25 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const isProcessing = ref<boolean>(false)
 
 const userStore = useUserStore()
 const listStore = useListStore()
+const uiStore = useUIStore()
+
+const { favoriteIDs } = storeToRefs(uiStore)
+
+const isProcessing = computed(() => {
+  if (!props.user) return false
+
+  return favoriteIDs.value.includes(props.user.email)
+})
 
 async function addFavorite(user: DocumentData) {
   if (user.isFavorite === true || isProcessing.value === true) {
     return
   }
 
-  isProcessing.value = true
+  favoriteIDs.value.push(user.email)
 
   const result = await storeService.addFavorite(userStore.uid, user.email)
 
@@ -54,7 +64,7 @@ async function addFavorite(user: DocumentData) {
     user.isFavorite = true
   }
 
-  isProcessing.value = false
+  favoriteIDs.value.splice(favoriteIDs.value.indexOf(user.email), 1)
 }
 
 async function removeFavorite(user: DocumentData) {
@@ -62,7 +72,7 @@ async function removeFavorite(user: DocumentData) {
     return
   }
 
-  isProcessing.value = true
+  favoriteIDs.value.push(user.email)
 
   const result = await storeService.removeFavorite(userStore.uid, user.email)
 
@@ -71,7 +81,7 @@ async function removeFavorite(user: DocumentData) {
     user.isFavorite = false
   }
 
-  isProcessing.value = false
+  favoriteIDs.value.splice(favoriteIDs.value.indexOf(user.email), 1)
 }
 
 </script>
