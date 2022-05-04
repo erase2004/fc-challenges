@@ -1,16 +1,124 @@
-# Vue 3 + TypeScript + Vite
+# Random User
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Project Preview
+![preview image 01](./public/previews/01.png)
+![preview image 02](./public/previews/02.png)
+![preview image 03](./public/previews/03.png)
+![preview image 04](./public/previews/04.png)
+![preview image 05](./public/previews/05.png)
+![preview image 06](./public/previews/06.png)
 
-## Recommended IDE Setup
+Project Url :point_right: [Link](https://tsuki-random-user.web.app/)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+- - -
 
-## Type Support For `.vue` Imports in TS
+## This project is currently built on
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+- [Vite](https://vitejs.dev/)
+- [Vue3](https://vuejs.org/)
+- [Vue router 4](https://router.vuejs.org/)
+- [Pinia](https://pinia.vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [ts-node](https://github.com/TypeStrong/ts-node)
+- [VeeValidate](https://vee-validate.logaretm.com/v4/)
+- [yup](https://github.com/jquense/yup)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Pug](https://pugjs.org/api/getting-started.html)
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+- - -
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+## Project Installation Quide
+
+1. Get started with Firebase.  Create a firebase project. [1](https://cloud.google.com/firestore/docs/client/get-firebase)
+2. Go to `Project Settings` in Firebase console.  Get the `firebaseConfig` in General tab.  Save it to `firebaseConfig.ts` under the path - `${project_root}/src/secrets/`.  The content of `firebaseConfig.ts` should be like following:
+```
+export const firebaseConfig = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
+};
+```
+3. Go to `Project Settings` in Firebase console.  Go to `Service Accounts` tab.  Create a private key and save it as `serviceAccount.json` under the path - `${project_root}/src/secrets/`.
+4. Go to `Project Settings` in Firebase console.  Go to General tab.  Get the project number information and save it to `.firebaserc` under the path - `${project_root}/`.  The content of `.firebaserc` should be following:
+```
+{
+  "projects": {
+    "default": "<project number>"
+  }
+}
+```
+5. Install package dependency (If you haven't install Yarn, please install it first. [2](https://yarnpkg.com/getting-started/install) )
+```
+yarn install
+```
+6. Create dummy users and datas in Firebase.
+```
+yarn initialize
+```
+7. Done
+- - -
+
+## Usage Guide
+
+### Compiles and hot-reloads for development
+```
+yarn dev
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Preview production build before deploy
+```
+yarn preview
+```
+
+- - -
+
+## Deploy Guide
+
+[Deploy a Static Site | Vite](https://vitejs.dev/guide/static-deploy.html#google-firebase)
+
+- - -
+
+## Project Directory Explanation
+    /src               - root directory of source code
+    /src/styles        - CSS source code
+    /src/views         - Vue views
+    /src/components    - Vue components
+    /src/stores        - Pinia store
+    /src/router        - Vue Router config
+    /src/services      - Firebase services
+    /src/utils         - shared utility
+    /src/types         - shared TypeScript types
+    /src/secrets       - secret files
+    /src/backend       - root directory of Firebase Admin related code
+
+- - -
+
+## Problems and Solutions
+
+- - -
+### Problem: ts-node doesn't have path resolution as tsc.
+ref: [paths and baseUrl | ts-node](https://typestrong.org/ts-node/docs/paths/)
+
+### Solution: Install and apply `tsconfig-path/register` plugin.
+
+- - -
+
+### Problem: Want to extract the same type definitions used by `defineProps` and `defineEmits` in `UserList.vue` and `UserCard.vue` into `userComponent.ts`.  But, failed with not supported yet.
+ref: [How to import interface for defineProps | Github issue](https://github.com/vuejs/core/issues/4294)
+
+### Solution: Problem is not solved due to this feature is not supported yet.  Left the same type definitions lie on two files.
+
+- - -
+
+### Problem: Firestore doesn't provide pagination with the ability to jump to certain page.
+
+### Solution: Use `enableIndexedDbPersistence` on Firestore, and query the all documents in collection.  Save the documents to IndexedDB and Pinia store.  Build pagination with Pinia store.  By using `enableIndexedDbPersistence`, it could reduce further read cost.
