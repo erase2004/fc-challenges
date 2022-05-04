@@ -24,6 +24,7 @@ Project Url :point_right: [Link](https://tsuki-random-user.web.app/)
 - [yup](https://github.com/jquense/yup)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Pug](https://pugjs.org/api/getting-started.html)
+- [Firebase](https://firebase.google.com/docs/reference)
 
 - - -
 
