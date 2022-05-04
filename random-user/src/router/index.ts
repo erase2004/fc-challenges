@@ -25,6 +25,10 @@ const routes: RouteRecordRaw[] = [
     meta: {
       requireAuth: true
     }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: { name: 'home' }
   }
 ]
 
