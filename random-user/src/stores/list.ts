@@ -31,6 +31,7 @@ export const useStore = defineStore('list', {
     displayData: [] as DocumentData[],
     totalPage: 1,
     current: 1,
+    hasError: false,
     loading: true,
   }),
   getters: {
@@ -45,6 +46,7 @@ export const useStore = defineStore('list', {
     setTab(tab: string | null): void {
       this.tab = getValidTab(tab)
       storage.set(TAB_KEY, this.tab)
+      this.hasError = false
     },
     setPageSize(pageSize: string | number | null): void {
       this.pageSize = getValidPageSize(pageSize)
@@ -109,6 +111,7 @@ export const useStore = defineStore('list', {
 
       } catch (error) {
 
+        this.hasError = true
         throw error
       } finally {
 

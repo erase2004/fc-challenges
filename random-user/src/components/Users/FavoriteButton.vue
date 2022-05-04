@@ -44,6 +44,7 @@ const uiStore = useUIStore()
 
 const { favoriteIDs } = storeToRefs(uiStore)
 
+// use favoriteIDs in UI store to sync processing status cross 'same button' under different list format
 const isProcessing = computed(() => {
   if (!props.user) return false
 
