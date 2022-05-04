@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.input-error {
+  @apply h-4 mt-1 text-xs text-red-700;
+}
+
+.text-input {
+  @apply w-full text-base p-2 border-2 border-solid border-[#b8c4cf] rounded-md;
+}
+
+.action-button-primary {
+  @apply text-base text-white bg-primary px-6 rounded-md;
+  @apply hover:opacity-70;
+  @apply disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;
+}
+
+.action-text {
+  @apply text-base font-bold my-2;
+  @apply border-b-2 border-solid cursor-pointer;
+}
+
+.action-text-primary {
+  @apply action-text text-primary border-[#b3b3ef];
+  @apply hover:opacity-70;
+  @apply disabled:opacity-70 disabled:cursor-not-allowed;
+}
+
+.action-text-secondary {
+  @apply action-text text-secondary border-[#e9e7fd];
+  @apply hover:text-primary hover:border-[#b3b3ef] hover:opacity-70;
+}
